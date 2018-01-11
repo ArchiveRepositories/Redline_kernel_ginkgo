@@ -107,11 +107,11 @@ n	[A-Za-z0-9_-]
 		current_pos.file = current_file;
 		current_pos.lineno = current_file->lineno;
 		if (id && id->flags & TF_COMMAND) {
-			zconflval.id = id;
+			yylval.id = id;
 			return id->token;
 		}
 		alloc_string(yytext, yyleng);
-		zconflval.string = text;
+		yylval.string = text;
 		return T_WORD;
 	}
 	.	warn_ignored_character(*yytext);
@@ -143,11 +143,11 @@ n	[A-Za-z0-9_-]
 	({n}|[/.])+	{
 		const struct kconf_id *id = kconf_id_lookup(yytext, yyleng);
 		if (id && id->flags & TF_PARAM) {
-			zconflval.id = id;
+			yylval.id = id;
 			return id->token;
 		}
 		alloc_string(yytext, yyleng);
-		zconflval.string = text;
+		yylval.string = text;
 		return T_WORD;
 	}
 	({n}|[/.$])+	{
@@ -170,7 +170,7 @@ n	[A-Za-z0-9_-]
 	"$".*	append_expanded_string(yytext);
 	[^$'"\\\n]+/\n	{
 		append_string(yytext, yyleng);
-		zconflval.string = text;
+		yylval.string = text;
 		return T_WORD_QUOTE;
 	}
 	[^$'"\\\n]+	{
@@ -178,7 +178,7 @@ n	[A-Za-z0-9_-]
 	}
 	\\.?/\n	{
 		append_string(yytext + 1, yyleng - 1);
-		zconflval.string = text;
+		yylval.string = text;
 		return T_WORD_QUOTE;
 	}
 	\\.?	{
@@ -187,7 +187,7 @@ n	[A-Za-z0-9_-]
 	\'|\"	{
 		if (str == yytext[0]) {
 			BEGIN(PARAM);
-			zconflval.string = text;
+			yylval.string = text;
 			return T_WORD_QUOTE;
 		} else
 			append_string(yytext, 1);
@@ -326,7 +326,7 @@ void zconf_starthelp(void)
 
 static void zconf_endhelp(void)
 {
-	zconflval.string = text;
+	yylval.string = text;
 	BEGIN(INITIAL);
 }
 
