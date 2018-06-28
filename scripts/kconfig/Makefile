@@ -299,7 +299,24 @@ quiet_cmd_moc = MOC     $@
 $(obj)/%.moc: $(src)/%.h $(obj)/.tmp_qtcheck
 	$(call cmd,moc)
 
-# Extract gconf menu items for i18n support
-$(obj)/gconf.glade.h: $(obj)/gconf.glade
-	$(Q)intltool-extract --type=gettext/glade --srcdir=$(srctree) \
-	$(obj)/gconf.glade
+# gconf: Used for the gconfig target based on GTK+
+hostprogs-y	+= gconf
+gconf-objs	:= gconf.o zconf.tab.o
+
+HOSTLOADLIBES_gconf = $(shell . $(obj)/.gconf-cfg && echo $$libs)
+HOSTCFLAGS_gconf.o  = $(shell . $(obj)/.gconf-cfg && echo $$cflags)
+
+$(obj)/gconf.o: $(obj)/.gconf-cfg
+
+$(obj)/zconf.tab.o: $(obj)/zconf.lex.c
+
+# check if necessary packages are available, and configure build flags
+define filechk_conf_cfg
+	$(CONFIG_SHELL) $(srctree)/scripts/kconfig/check-pkgconfig.sh; \
+	$(CONFIG_SHELL) $<
+endef
+
+$(obj)/.%conf-cfg: $(src)/%conf-cfg.sh FORCE
+	$(call filechk,conf_cfg)
+
+clean-files += .*conf-cfg
