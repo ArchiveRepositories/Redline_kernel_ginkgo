@@ -803,7 +803,7 @@ static void build_conf(struct menu *menu)
 		}
 
 		val = sym_get_tristate_value(sym);
-		if (sym_is_changable(sym)) {
+		if (sym_is_changeable(sym)) {
 			switch (type) {
 			case S_BOOLEAN:
 				item_make(menu, 't', "[%c]",
@@ -857,7 +857,7 @@ static void build_conf(struct menu *menu)
 		} else {
 			switch (type) {
 			case S_BOOLEAN:
-				if (sym_is_changable(sym))
+				if (sym_is_changeable(sym))
 					item_make(menu, 't', "[%c]",
 						val == no ? ' ' : '*');
 				else
@@ -876,7 +876,7 @@ static void build_conf(struct menu *menu)
 					ch = ' ';
 					break;
 				}
-				if (sym_is_changable(sym)) {
+				if (sym_is_changeable(sym)) {
 					if (sym->rev_dep.tri == mod)
 						item_make(menu,
 							't', "{%c}", ch);
@@ -896,15 +896,15 @@ static void build_conf(struct menu *menu)
 				item_add_str("%*c%s%s", tmp, ' ',
 						_(menu_get_prompt(menu)),
 						(sym_has_value(sym) ||
-						 !sym_is_changable(sym)) ? "" :
-						_(" (NEW)"));
+						 !sym_is_changeable(sym)) ? "" :
+						" (NEW)");
 				goto conf_childs;
 			}
 		}
 		item_add_str("%*c%s%s", indent + 1, ' ',
-				_(menu_get_prompt(menu)),
-				(sym_has_value(sym) || !sym_is_changable(sym)) ?
-				"" : _(" (NEW)"));
+				menu_get_prompt(menu),
+				(sym_has_value(sym) || !sym_is_changeable(sym)) ?
+				"" : " (NEW)");
 		if (menu->prompt && menu->prompt->type == P_MENU) {
 			item_add_str("  %s", menu_is_empty(menu) ? "----" : "--->");
 			return;
