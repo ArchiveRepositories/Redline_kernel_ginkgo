@@ -115,7 +115,7 @@ static bool sugov_should_update_freq(struct sugov_policy *sg_policy, u64 time)
 	 * This is needed on the slow switching platforms too to prevent CPUs
 	 * going offline from leaving stale IRQ work items behind.
 	 */
-	if (!cpufreq_can_do_remote_dvfs(sg_policy->policy))
+	if (!cpufreq_this_cpu_can_update(sg_policy->policy))
 		return false;
 
 	if (unlikely(sg_policy->limits_changed)) {
