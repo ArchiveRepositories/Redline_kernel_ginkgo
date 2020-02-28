@@ -4,9 +4,8 @@ config DEFCONFIG_LIST
 	option defconfig_list
 	default "/lib/modules/$(UNAME_RELEASE)/.config"
 	default "/etc/kernel-config"
-	default "/boot/config-$(UNAME_RELEASE)"
-	default ARCH_DEFCONFIG
-	default "arch/$(ARCH)/defconfig"
+	default "/boot/config-$(shell,uname -r)"
+	default "arch/$(SRCARCH)/configs/$(KBUILD_DEFCONFIG)"
 
 config TOOLS_SUPPORT_RELR
 	bool "Declare tool support for RELR"

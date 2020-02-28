@@ -353,6 +353,9 @@ hdr-arch  := $(SRCARCH)
 KCONFIG_CONFIG	?= .config
 export KCONFIG_CONFIG
 
+# Default file for 'make defconfig'. This may be overridden by arch-Makefile.
+export KBUILD_DEFCONFIG := defconfig
+
 # SHELL used by kbuild
 CONFIG_SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
 	  else if [ -x /bin/bash ]; then echo /bin/bash; \
