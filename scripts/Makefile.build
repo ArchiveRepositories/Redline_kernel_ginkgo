@@ -341,8 +341,9 @@ objtool_dep = $(objtool_obj)					\
 			 include/config/stack/validation.h)
 
 define rule_cc_o_c
-	$(call cmd,checksrc)
 	$(call cmd_and_fixdep,cc_o_c)
+	$(call cmd,gen_ksymdeps)
+	$(call cmd,checksrc)
 	$(call cmd,checkdoc)
 	$(call cmd,objtool)
 	$(call cmd,modversions_c)
@@ -364,8 +365,8 @@ endif
 
 # Built-in and composite module parts
 $(obj)/%.o: $(src)/%.c $(recordmcount_source) $(objtool_dep) FORCE
-	$(call cmd,force_checksrc)
 	$(call if_changed_rule,cc_o_c)
+	$(call cmd,force_checksrc)
 
 # Single-part modules are special since we need to mark them in $(MODVERDIR)
 
