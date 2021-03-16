@@ -38,6 +38,7 @@
 *.symtypes
 *.tar
 *.xz
+*.zip
 Module.symvers
 modules.builtin
 
@@ -124,3 +125,7 @@ all.config
 
 # fetched Android config fragments
 kernel/configs/android-*.cfg
+
+# Ignore out and AnyKernel3 directory
+out
+AnyKernel3
